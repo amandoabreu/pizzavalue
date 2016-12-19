@@ -5,6 +5,13 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
+/**
+  TODO localstorage
+  Default to cm/euro
+  If user changes save in localstorage 
+  _.get*Unit() return localstorage if exists, else default.
+*/
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -39,7 +46,12 @@ angular.module('starter', ['ionic'])
     _.diameterUnitDefault = 'metric';
 
     _.init = function(){
-      var priceUnit = localStorage.getItem('priceUnit');
+      if(localStorage.getItem('priceUnitDefault') == null){
+        localStorage.setItem('priceUnitDefault', _.priceUnitDefault);
+      }
+      if(localStorage.getItem('diameterUnitDefault') == null){
+        localStorage.setItem('diameterUnitDefault', _.diameterUnitDefault);
+      }
       console.log(priceUnit);
     }
 

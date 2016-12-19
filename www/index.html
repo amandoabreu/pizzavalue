@@ -41,9 +41,29 @@
       <ion-content>
       <div class="controls">
   <form>
-    <input class="input input--text" type="text" id="pizzaDiameter" name="diameter" placeholder="Pizza diameter"/>
-    <input id="pizzaPrice" class="input input--text" type="text" name="price" placeholder="Price"/>
-  <button class="button" id="addPizza" type="button">Add pizza</button>
+    <label class="item item-input item-select">
+      <input type="text" id="pizzaDiameter">
+      <div class="input-label">
+          &nbsp;
+      </div>
+      <select>
+        <option>Cm</option>
+        <option>Inches</option>
+      </select>
+    </label>
+    <label class="item item-input item-select">
+      <input type="text" id="pizzaPrice">
+      <div class="input-label">
+          &nbsp;
+      </div>
+      <select>
+        <option>Euro €</option>
+        <option>Dollar $</option>
+      </select>
+    </label>
+    <button class="button button-block" id="addPizza" type="button">
+      Add pizza
+    </button>
   </form>
 </div>
 <div class="pizzas" id="pizzaList">

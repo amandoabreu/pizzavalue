@@ -82,8 +82,9 @@ angular.module('starter', ['ionic'])
       var bestValue = null;
       for(var i = 0; i < _.pizzas.length; i++){
         var thisPizza = _.pizzas[i];
-        var area = 3.141592 * Math.sqrt((thisPizza.diameter / 2));
-        console.log('area:'+area);
+        var radius = thisPizza.diameter / 2;
+        var area = 3.141592 * (radius * radius);
+        console.log('area:'+area+' price per cm^2: '+thisPizza.price/area);
       }
     };
     _.init();

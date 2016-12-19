@@ -1,0 +1,27 @@
+.pizzas{
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.pizza{
+  background: #666666;
+  width: 250px;
+  height: 250px;
+  border-radius: 125px;
+  font-size: 20px;
+  color: white;
+  font-weight:bold;
+  align-self:center;
+}
+.pizza__price{
+    position:absolute;
+    margin-top:100px;
+    text-align:center;
+    width:250px;
+  }
+  .pizza__diameter{
+   position: absolute;
+    margin-top:120px;
+    text-align:center;
+    width:250px;
+  }

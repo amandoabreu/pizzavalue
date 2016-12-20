@@ -38,37 +38,48 @@
       <ion-header-bar class="bar-stable">
         <h1 class="title">Pizza value calculator</h1>
       </ion-header-bar>
-      <ion-content>
-      <div class="controls">
-  <form>
-    <label class="item item-input item-select">
-      <input type="text" id="pizzaDiameter">
-      <div class="input-label">
-          &nbsp;
-      </div>
-      <select>
-        <option>Cm</option>
-        <option>Inches</option>
-      </select>
-    </label>
-    <label class="item item-input item-select">
-      <input type="text" id="pizzaPrice">
-      <div class="input-label">
-          &nbsp;
-      </div>
-      <select>
-        <option>Euro €</option>
-        <option>Dollar $</option>
-      </select>
-    </label>
-    <button class="button button-block" id="addPizza" type="button">
-      Add pizza
-    </button>
-  </form>
-</div>
-<div class="pizzas" id="pizzaList">
-</div>
+      <ion-content class="has-footer">
+        <div class="controls">
+          <form>
+            <label class="item item-input item-select">
+              <input type="text" id="pizzaDiameter">
+              <div class="input-label">
+                  &nbsp;
+              </div>
+              <select class="changeUnit" data-unit="diameter">
+                <option value="cm">Cm</option>
+                <option value="inches">Inches</option>
+              </select>
+            </label>
+            <label class="item item-input item-select">
+              <input type="text" id="pizzaPrice">
+              <div class="input-label">
+                  &nbsp;
+              </div>
+              <select class="changeUnit" data-unit="price">
+                <option value="€">Euro €</option>
+                <option value="$">Dollar $</option>
+              </select>
+            </label>
+            <button class="button button-block" id="addPizza" type="button">
+              Add pizza
+            </button>
+          </form>
+        </div>
+        <div class="pizzas" id="pizzaList">
+        
+        </div>
       </ion-content>
+      <ion-footer-bar align-title="left" class="bar-assertive">
+  <div class="buttons">
+    <button class="button">Left Button</button>
+  </div>
+  <h1 class="title">Title!</h1>
+  <div class="buttons" ng-click="doSomething()">
+    <button class="button">Right Button</button>
+  </div>
+</ion-footer-bar>
+
     </ion-pane>
   </body>
 </html>

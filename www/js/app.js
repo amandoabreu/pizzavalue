@@ -29,87 +29,161 @@ angular.module('starter', ['ionic'])
     }
 
 
-  var pizza = function(){
-    var _ = this;
-    _.pizzas = [];
+    var pizza = function(){
+      var _ = this;
+      _.pizzas = [];
 
-    _.priceUnits = {
-      'euro'   : '€',
-      'pound'  : '',
-      'dollar' : '$'
-    };
-    _.diameterUnits = {
-      'metric'  : 'cm',
-      'imperial': 'inches'
-    };
-    _.priceUnitDefault    = 'euro'; // Save in localstorage
-    _.diameterUnitDefault = 'metric';
+      _.priceUnits = {
+        'euro'   : '€',
+        'pound'  : '',
+        'dollar' : '$'
+      };
+      _.diameterUnits = {
+        'metric'  : 'cm',
+        'imperial': 'inches'
+      };
+      _.priceUnitDefault    = '€';
+      _.diameterUnitDefault = 'cm';
 
-    _.init = function(){
-      if(localStorage.getItem('priceUnitDefault') == null){
-        localStorage.setItem('priceUnitDefault', _.priceUnitDefault);
+      _.changeUnit = function(unit, newValue){
+        if(unit == 'price'){
+          localStorage.setItem('priceUnitDefault', newValue);
+        }
+        if(unit == 'diameter'){
+          localStorage.setItem('diameterUnitDefault', newValue); 
+        }
+      };
+
+      _.hash = function(str){
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = ~~(((hash << 5) - hash) + str.charCodeAt(i));
+        }
+        return hash;
       }
-      if(localStorage.getItem('diameterUnitDefault') == null){
-        localStorage.setItem('diameterUnitDefault', _.diameterUnitDefault);
-      }
-      console.log(priceUnit);
-    }
 
-    _.getPriceUnit = function(){
-      return _.priceUnits[_.priceUnitDefault];
+      _.getPriceUnit = function(){
+        if(localStorage.getItem('priceUnitDefault') == null){
+          return _.priceUnitDefault;
+        } else {
+          return localStorage.getItem('priceUnitDefault');
+        }
+      };
+
+      _.getDiameterUnit = function(){
+        if(localStorage.getItem('diameterUnitDefault') == null){
+          return _.diameterUnitDefault;
+        } else {
+          return localStorage.getItem('diameterUnitDefault');
+        }
+      };
+
+      _.remove = function(event){
+        var pizzaId = this.dataset.itemid;
+        var pizzaElement = document.getElementById(pizzaId);
+        pizzaElement.parentNode.removeChild(pizzaElement);
+        console.log(pizzaId);
+        for( i=_.pizzas.length-1; i>=0; i--) {
+          if( _.pizzas[i].pizzaId == pizzaId) _.pizzas.splice(i,1);
+        }
+      };
+
+      _.make = function(price, diameter){
+        var priceVal         = document.createTextNode(price + _.getPriceUnit());
+        var diameterVal      = document.createTextNode(diameter + _.getDiameterUnit());
+        var removeText           = document.createTextNode('Delete');
+
+        var pizzaList        = document.getElementById('pizzaList');
+
+        var priceElement     = document.createElement('div');
+        var diameterElement  = document.createElement('div');
+        var pastry           = document.createElement('div');
+        var remove           = document.createElement('button');
+
+        var pizzaId = _.hash(parseInt(price)+''+parseInt(diameter)+_.getDiameterUnit()+_.getPriceUnit());
+
+        
+        if(document.getElementById(pizzaId) == null && price != '' && diameter != ''){
+          remove.appendChild(removeText);
+          remove.setAttribute('class','button button-assertive button-delete');
+          remove.setAttribute('data-itemid',pizzaId);
+
+          _.pizzas.push({
+            "pizzaId": pizzaId,
+            "price": parseInt(price), 
+            "priceUnit": _.getPriceUnit(),
+            "diameter": parseInt(diameter),
+            "diameterUnit": _.getDiameterUnit()
+          });
+
+          console.log('Pizza array: '+_.pizzas);
+          
+          diameterElement.appendChild(diameterVal);
+          priceElement.appendChild(priceVal);
+          priceElement.setAttribute('class','pizza__price');
+          diameterElement.setAttribute('class', 'pizza__diameter');
+          pastry.setAttribute('class','pizza');
+          pastry.setAttribute('id',pizzaId);
+          
+          pastry.appendChild(diameterElement);
+          pastry.appendChild(priceElement);
+          remove.addEventListener('click', _.remove, true);
+          pastry.appendChild(remove);
+          pizzaList.appendChild(pastry);
+        }
+      };
+
+      _.calculateBestValue = function(){
+        var bestValue = null;
+        priceAreaRatios = [];
+        for(var i = 0; i < _.pizzas.length; i++){
+          var thisPizza = _.pizzas[i];
+          var radius = thisPizza.diameter / 2;
+          var area = 3.141592 * (radius * radius);
+
+          priceAreaRatios.push({
+            'id'   : thisPizza.pizzaId,
+            'priceAreaRatio' : thisPizza.price/area
+          });
+
+          //console.log('area:'+area+' price per cm^2: '+thisPizza.price/area);
+        }
+
+        var smallest = 0;
+        for(p = 0; p < priceAreaRatios.length; p++){
+          if(priceAreaRatios[smallest].priceAreaRatio> priceAreaRatios[p].priceAreaRatio){
+            smallest = p;
+          }
+        }
+
+        cheapestPizza = document.getElementById(priceAreaRatios[smallest].id);
+        cheapestPizza.classList.add('bestValue');
+        cheapestPizza.scrollIntoView(true);
+        console.log(smallest);
+      };
     };
 
-    _.getDiameterUnit = function(){
-      return _.diameterUnits[_.diameterUnitDefault];
-    };
-
-    _.make = function(price, diameter){
-      console.log('pizza!'+price+" "+diameter);
-      var priceVal         = document.createTextNode(price + _.getPriceUnit());
-      var diameterVal      = document.createTextNode(diameter + _.getDiameterUnit());
-      var pizzaList        = document.getElementById('pizzaList');
-      var priceElement     = document.createElement('div');
-      var diameterElement  = document.createElement('div');
-      var pastry           = document.createElement('div');
-
-      _.pizzas.push({
-        "price": parseInt(price), 
-        "diameter": parseInt(diameter)
-      });
-
-      console.log(_.pizzas);
-      
-      diameterElement.appendChild(diameterVal);
-      priceElement.appendChild(priceVal);
-      priceElement.setAttribute('class','pizza__price');
-      diameterElement.setAttribute('class', 'pizza__diameter');
-      pastry.setAttribute('class','pizza');
-      
-      pastry.appendChild(diameterElement);
-      pastry.appendChild(priceElement);
-      pizzaList.appendChild(pastry);
-    };
-
-    _.calculateBestValue = function(){
-      var bestValue = null;
-      for(var i = 0; i < _.pizzas.length; i++){
-        var thisPizza = _.pizzas[i];
-        var radius = thisPizza.diameter / 2;
-        var area = 3.141592 * (radius * radius);
-        console.log('area:'+area+' price per cm^2: '+thisPizza.price/area);
-      }
-    };
-    _.init();
-  };
   
-  var pizza = new pizza();
-  var addPizza = document.getElementById('addPizza');
-  addPizza.addEventListener('click', function(e){
-    var diameter = document.getElementById('pizzaDiameter');
-    var price    = document.getElementById('pizzaPrice');
-    pizza.make(price.value, diameter.value);
-    pizza.calculateBestValue();
-  });
+    var pizza = new pizza();
+    var addPizza = document.getElementById('addPizza');
+    addPizza.addEventListener('click', function(e){
+      var diameter = document.getElementById('pizzaDiameter');
+      var price    = document.getElementById('pizzaPrice');
+      pizza.make(price.value, diameter.value);
+    });
 
+    var change = document.getElementsByClassName('changeUnit');
+    Array.from(change).forEach(function(element) {
+      element.addEventListener('change', function(){
+        console.log(this.value);
+        pizza.changeUnit(this.dataset.unit, this.value);
+        return true;
+      });
+    });
+
+    var calc = document.getElementById('calculate');
+    calc.addEventListener('click', function(){
+      pizza.calculateBestValue();
+    });
   });
 })

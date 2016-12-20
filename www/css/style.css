@@ -12,6 +12,7 @@
   color: white;
   font-weight:bold;
   align-self:center;
+  margin-bottom: 10px;
 }
 .pizza__price{
     position:absolute;
@@ -41,4 +42,23 @@
     align-items: center;
   }
 
-  .item-select: width:30px;
+
+  .button.button-assertive.button-delete{
+    position: absolute;
+    margin: 170px;
+    margin-left: 91px;
+  }
+
+  .bestValue {
+    
+  }
+
+  .bestValue:after {
+    content: "Best value!";
+    display: inline-block;
+    color: white;
+    background: #6bc159;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 8px 0 0 0;
+}
